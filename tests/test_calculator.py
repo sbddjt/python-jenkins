@@ -57,3 +57,9 @@ class TestCalculator:
         """각 테스트 후 정리"""
         self.calculator = None
         print("테스트 종료: 객체 정리 완료\n")
+
+    def test_power(self):
+        """거듭제곱 테스트"""
+        result = self.calculator.power(2, 3)
+        assert result == 8, "2^3은 8이어야 합니다"
+        print(f"✓ 거듭제곱 테스트 통과: 2^3 = {result}")
