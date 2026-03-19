@@ -1,9 +1,24 @@
 pipeline {
     agent any
+
+    options {
+        timestamps() // 타임스탬프 자동 추가
+    }
+
+    environment {
+        PYTHON_VERSION = '3.9'
+        PROJECT_NAME = "Python Calculator"
+    }
     
     stages {
         stage('GitHub Clone') {
             steps {
+                echo "========================================="
+                echo "Project: ${PROJECT_NAME}"
+                echo "Python Version: ${PYTHON_VERSION}"
+                echo "Build Number: ${BUILD_NUMBER}"
+                echo "========================================="
+
                 git branch: 'main', 
                     url: 'https://github.com/sbddjt/python-jenkins.git'
             }
