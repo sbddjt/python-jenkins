@@ -63,3 +63,9 @@ class TestCalculator:
         result = self.calculator.power(2, 3)
         assert result == 8, "2^3은 8이어야 합니다"
         print(f"✓ 거듭제곱 테스트 통과: 2^3 = {result}")
+
+    def test_modulo(self):
+        """나머지 연산 테스트"""
+        result = self.calculator.modulo(10, 3)
+        assert result == 1, "10 % 3은 1이어야 합니다"
+        print(f"✓ 나머지 연산 테스트 통과: 10 % 3 = {result}")
