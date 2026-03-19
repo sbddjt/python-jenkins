@@ -8,6 +8,7 @@ pipeline {
     environment {
         PYTHON_VERSION = '3.9'
         PROJECT_NAME = "Python Calculator"
+        DOCKER_IMAGE = 'sbddjt/python-calculator'
     }
     
     stages {
@@ -55,6 +56,17 @@ pipeline {
                     . venv/bin/activate
                     # pylint나 flake8 등 추가 가능
                     echo "✅ Code quality check passed"
+                '''
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                sh '''
+                    echo "▶ Docker 이미지 빌드 🐳"
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                    docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest
+                    echo "✅ Docker 이미지 빌드 완료"
                 '''
             }
         }
