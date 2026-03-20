@@ -9,6 +9,7 @@ pipeline {
         PYTHON_VERSION = '3.9'
         PROJECT_NAME = "Python Calculator"
         DOCKER_IMAGE = 'sbddjt/python-calculator'
+        DOCKER_CREDENTIALS = credentials('dockerhub-token')
     }
     
     stages {
@@ -70,8 +71,28 @@ pipeline {
                 '''
             }
         }
+
+        stage('Docker Login') {
+            steps {
+                sh '''
+                    echo "▶ Docker Hub 로그인"
+                    echo ${DOCKERHUB_CREDENTIALS} | docker login -u sbddjt --password-stdin
+                '''
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                sh '''
+                    echo "▶ Docker Hub에 이미지 Push 🚀"
+                    docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                    docker push ${DOCKER_IMAGE}:latest
+                    echo "✅ Docker Hub Push 완료"
+                '''
+            }
+        }
     }
-    
+
     post {
         always {
             echo '========================================='
