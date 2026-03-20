@@ -9,7 +9,7 @@ pipeline {
         PYTHON_VERSION = '3.9'
         PROJECT_NAME = "Python Calculator"
         DOCKER_IMAGE = 'sbddjt/python-calculator'
-        DOCKER_CREDENTIALS = credentials('dockerhub-token')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
     }
     
     stages {
