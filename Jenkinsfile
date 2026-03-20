@@ -91,6 +91,27 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy to Server') {
+            steps {
+                sshagent(credentials: ['deploy-server-ssh']) {
+                    sh '''
+                        echo "▶ 원격 서버에 배포 🚀"
+                
+                        # 배포 스크립트를 서버에 복사
+                        scp -o StrictHostKeyChecking=no -P 2222 \
+                            deploy.sh seongyun@192.168.56.1:/tmp/
+                
+                        # 서버에서 배포 스크립트 실행
+                        ssh -o StrictHostKeyChecking=no -p 2222 \
+                            seongyun@192.168.56.1 \
+                            "bash /tmp/deploy.sh ${BUILD_NUMBER}"
+                
+                        echo "✅ 배포 완료!"
+                    '''
+                }
+            }
+        }
     }
 
     post {
