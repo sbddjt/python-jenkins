@@ -116,15 +116,31 @@ pipeline {
 
     post {
         always {
+            sh '''
+                echo "▶ Docker 이미지 정리"
+            
+                # 현재 빌드와 latest를 제외한 이전 빌드 이미지 삭제
+                docker images ${DOCKER_IMAGE} --format "{{.Tag}}" | \
+                grep -v "latest" | \
+                grep -v "${BUILD_NUMBER}" | \
+                xargs -r -I {} docker rmi -f ${DOCKER_IMAGE}:{}
+            
+                # dangling 이미지 정리 (태그 없는 이미지)
+                docker image prune -f
+            
+                echo "✅ 이미지 정리 완료"
+            '''
+        
+            sh 'docker logout'
             echo '========================================='
             echo '파이프라인 실행 완료'
             echo '========================================='
         }
-        success {
-            echo '✅ 모든 테스트 통과! 배포 준비 완료'
+            success {
+            echo '✅ Docker 이미지 빌드 및 원격 서버 배포 완료!'
         }
-        failure {
-            echo '❌ 빌드 또는 테스트 실패'
+            failure {
+            echo '❌ 빌드 또는 배포 실패'
         }
     }
 }
